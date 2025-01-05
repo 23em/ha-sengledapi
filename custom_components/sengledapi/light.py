@@ -52,7 +52,7 @@ class SengledBulb(LightEntity):
         self._name = light._friendly_name
         self._state = light._state
         self._brightness = light._brightness
-        self._available = light._available
+        self._available = light._avaliable  # Fixed spelling to match bulb implementation
         self._device_mac = light._device_mac
         self._device_model = light._device_model
         self._color_temperature = light._color_temperature
@@ -109,8 +109,7 @@ class SengledBulb(LightEntity):
         _LOGGER.debug("Light.py color_temp %s", self._color_temperature)
         if self._color_temperature is None:
             return colorutil.color_temperature_kelvin_to_mired(2000)
-        else:
-            return colorutil.color_temperature_kelvin_to_mired(self._color_temperature)
+        return colorutil.color_temperature_kelvin_to_mired(self._color_temperature)
 
     @property
     def hs_color(self):
@@ -119,10 +118,9 @@ class SengledBulb(LightEntity):
         if self._wifi_device:
             a, b, c = self._color.split(":")
             return colorutil.color_RGB_to_hs(int(a), int(b), int(c))
-        else:
-            return colorutil.color_RGB_to_hs(
-                int(self._rgb_color_r), int(self._rgb_color_g), int(self._rgb_color_b)
-            )
+        return colorutil.color_RGB_to_hs(
+            int(self._rgb_color_r), int(self._rgb_color_g), int(self._rgb_color_b)
+        )
 
     @property
     def brightness(self):
@@ -155,8 +153,7 @@ class SengledBulb(LightEntity):
             return ColorMode.HS
         elif self._support_color_temp:
             return ColorMode.COLOR_TEMP
-        else:
-            return ColorMode.BRIGHTNESS
+        return ColorMode.BRIGHTNESS
 
     async def async_turn_on(self, **kwargs):
         """Turn on or control the light."""
@@ -186,8 +183,7 @@ class SengledBulb(LightEntity):
         """
         await self._light.async_update()
         self._state = self._light.is_on()
-        self._available = self._light._available
-        self._state = self._light._state
+        self._available = self._light._avaliable  # Fixed spelling to match bulb implementation
         self._brightness = self._light._brightness
         self._color_temperature = self._light._color_temperature
         self._color = self._light._color
